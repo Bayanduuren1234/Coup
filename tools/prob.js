@@ -1,45 +1,51 @@
 function shuffle(array) {
-    var shuffled = [];
-    while (array.length) {
-        var i = Math.floor(Math.random() * array.length);
-        var e = array.splice(i, 1);
-        shuffled.push(e[0]);
-    }
-    return shuffled;
+  var shuffled = [];
+  while (array.length) {
+    var i = Math.floor(Math.random() * array.length);
+    var e = array.splice(i, 1);
+    shuffled.push(e[0]);
+  }
+  return shuffled;
 }
 
 function buildDeck() {
-    var deck = [];
-    for (var i = 0; i < 3; i++) {
-        deck = deck.concat(['duke', 'captain', 'ambassador', 'assassin', 'contessa']);
-    }
-    return shuffle(deck);
+  var deck = [];
+  for (var i = 0; i < 3; i++) {
+    deck = deck.concat([
+      "duke",
+      "captain",
+      "ambassador",
+      "assassin",
+      "contessa",
+    ]);
+  }
+  return shuffle(deck);
 }
 
 var counts = [];
 var totals = [];
 var players = 4;
 for (var i = 0; i < 100000; i++) {
-    var cards = [];
-    var deck = buildDeck();
-    for (var t = 0; t < 2; t++) {
-        for (var p = 0; p < players; p++) {
-            counts[p] = counts[p] || 0;
-            totals[p] = totals[p] || 0;
-            cards[p] = cards[p] || [];
-            cards[p].push(deck.pop());
-        }
+  var cards = [];
+  var deck = buildDeck();
+  for (var t = 0; t < 2; t++) {
+    for (var p = 0; p < players; p++) {
+      counts[p] = counts[p] || 0;
+      totals[p] = totals[p] || 0;
+      cards[p] = cards[p] || [];
+      cards[p].push(deck.pop());
     }
-    var ours = cards[0];
-    var theirs = cards[1];
-    if ((ours.indexOf('captain') >= 0)) {
-        totals[0]++;
-        if (theirs.indexOf('captain') < 0 && theirs.indexOf('ambassador') < 0) {
-            counts[0]++;
-        }
+  }
+  var ours = cards[0];
+  var theirs = cards[1];
+  if (ours.indexOf("captain") >= 0) {
+    totals[0]++;
+    if (theirs.indexOf("captain") < 0 && theirs.indexOf("ambassador") < 0) {
+      counts[0]++;
     }
+  }
 
-/*    for (var p = 1; p < players; p++) {
+  /*    for (var p = 1; p < players; p++) {
         if (cards[p][0] == 'duke' && cards[p][1] == 'duke') {
             counts[p]++;
         }
@@ -56,7 +62,6 @@ console.log(counts[0] / totals[0]);
 // I play duke in 68 games total
 // Of those 68 games, I have duke in 36 of them
 // I am telling the truth 53% of the time
-
 
 // In 100 games, 34 games I have exactly 1 duke
 // In 10 games of those 34, the opponent has at least one duke
