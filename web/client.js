@@ -52,8 +52,6 @@ vm = {
   sidebar: ko.observable("chat"), // Which pane is shown in the sidebar: chat or cheat sheet.
   history: ko.observableArray(), // List of all history items in the game in play.
   needName: ko.observable(false), // If true, the user is trying to join a game but they haven't logged in.
-  rankings: ko.observableArray(), // List of the displayed player rankings.
-  showingGlobalRank: ko.observable(true), // If true, global rankings are shown; if false, your rankings are shown.
   notifsEnabled: ko.observable(
     JSON.parse(localStorageGet("notifsEnabled") || false)
   ), // True if notifications are enabled.
@@ -113,9 +111,7 @@ vm.notifsEnabled.subscribe(function (enabled) {
 vm.notifToggleText = ko.computed(function () {
   // return vm.notifsEnabled() ? "Disable notifications" : "Enable notifications";
 });
-vm.rankButtonText = ko.computed(function () {
-  return vm.showingGlobalRank() ? "Show my rankings" : "Show global rankings";
-});
+
 vm.canStartGame = ko.computed(function () {
   var p = ourPlayer();
   return p && p.isReady() === true && countReadyPlayers() >= 2;
@@ -314,9 +310,7 @@ socket.on("error", function (data) {
 socket.on("game-error", function (data) {
   console.error(data);
 });
-socket.on("rankings", function (data) {
-  vm.rankings(data);
-});
+
 socket.on("gamenotfound", function (data) {
   alert("Game not found");
   location.hash = "";
@@ -371,20 +365,6 @@ var create = _.debounce(
       playerName: vm.playerName(),
       password: vm.password(),
     });
-  },
-  500,
-  true
-);
-
-var showRankings = _.debounce(
-  function (form, event) {
-    if (vm.showingGlobalRank()) {
-      vm.showingGlobalRank(false);
-      socket.emit("showmyrank");
-    } else {
-      vm.showingGlobalRank(true);
-      socket.emit("showrankings");
-    }
   },
   500,
   true
