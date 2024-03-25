@@ -49,13 +49,7 @@ var createNetPlayer = require("./net-player");
 var gameId = 1;
 var games = {};
 var players = {};
-var rankings = [];
-
-dataAccess.getPlayerRankings().then(function (result) {
-  rankings = result;
-  //This will submit the rankings to everyone
-  io.sockets.emit("rankings", result);
-});
+var s = [];
 
 app.post("/alert", function (req, res) {
   if (req.body && typeof req.body.msg == "string") {
@@ -69,9 +63,6 @@ app.post("/alert", function (req, res) {
 });
 
 io.on("connection", function (socket) {
-  //Emit the global rankings upon connect
-  socket.emit("rankings", rankings);
-
   socket.on("registerplayer", function (data) {
     if (isInvalidPlayerName(data.playerName)) {
       //Do not even attempt to register invalid player names
@@ -134,18 +125,6 @@ io.on("connection", function (socket) {
       return;
     }
     createNewGame(socket, data.password);
-  });
-
-  socket.on("showrankings", function () {
-    dataAccess.getPlayerRankings(socket.playerId).then(function (result) {
-      socket.emit("rankings", result);
-    });
-  });
-
-  socket.on("showmyrank", function () {
-    dataAccess.getPlayerRankings(socket.playerId, true).then(function (result) {
-      socket.emit("rankings", result);
-    });
   });
 
   socket.on("sendglobalchatmessage", function (data) {
@@ -243,12 +222,6 @@ function createNewGame(socket, password) {
   game.once("teardown", function () {
     delete games[gameName];
     broadcastGames();
-  });
-
-  game.once("end", function () {
-    dataAccess.getPlayerRankings().then(function (result) {
-      rankings = result;
-    });
   });
 
   game.on("statechange", function () {

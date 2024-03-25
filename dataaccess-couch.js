@@ -6,8 +6,6 @@ var pr = require("promise-ring");
 var ms = require("ms");
 var debug = require("debug")("dataaccess");
 
-var rankingsDisabled = false;
-
 var connection = new cradle.Connection();
 var treasonDb;
 var gameStatsDocumentId = "game_stats";
@@ -51,36 +49,34 @@ function init(dbname, options) {
       }
     })
     .then(function () {
-      if (!rankingsDisabled) {
-        debug("Database is up. Checking if views should be recreated");
-        return treasonDb
-          .get(gameVersionsDocumentId)
-          .then(function (result) {
-            if (result.currentViewVersion != currentViewVersion) {
+      debug("Database is up. Checking if views should be recreated");
+      return treasonDb
+        .get(gameVersionsDocumentId)
+        .then(function (result) {
+          if (result.currentViewVersion != currentViewVersion) {
+            updateViews = true;
+          } else {
+            debug("View version is up to date");
+          }
+        })
+        .catch(function () {
+          return treasonDb
+            .save(gameVersionsDocumentId, {
+              currentViewVersion: currentViewVersion,
+            })
+            .then(function () {
+              debug(
+                "Current view version document not found in database, created it"
+              );
               updateViews = true;
-            } else {
-              debug("View version is up to date");
-            }
-          })
-          .catch(function () {
-            return treasonDb
-              .save(gameVersionsDocumentId, {
-                currentViewVersion: currentViewVersion,
-              })
-              .then(function () {
-                debug(
-                  "Current view version document not found in database, created it"
-                );
-                updateViews = true;
-              })
-              .catch(function (error) {
-                console.error(
-                  "Failed to create initial current view version document"
-                );
-                console.error(error);
-              });
-          });
-      }
+            })
+            .catch(function (error) {
+              console.error(
+                "Failed to create initial current view version document"
+              );
+              console.error(error);
+            });
+        });
     })
     .then(function () {
       if (recreateViews || updateViews) {
@@ -175,29 +171,6 @@ function init(dbname, options) {
     })
     .then(function () {
       debug("Finished initialising views");
-      if (!rankingsDisabled) {
-        debug("Attempting to load game stats document");
-        return treasonDb
-          .get(gameStatsDocumentId)
-          .then(function (document) {
-            debug("Found game stats document");
-            stats = document.gameStats;
-          })
-          .catch(function () {
-            debug("Game stats document not found");
-            return calculateAllStats().then(function () {
-              debug("Stats generated, creating game stats document");
-              return treasonDb
-                .save(gameStatsDocumentId, {
-                  gameStats: stats,
-                })
-                .catch(function (error) {
-                  console.error("Failed to create game stats document");
-                  console.error(error);
-                });
-            });
-          });
-      }
     })
     .then(function () {
       debug("Database is ready");
@@ -306,9 +279,6 @@ function recordGameData(gameData) {
       .save(gameData)
       .then(function (result) {
         debug("Saved game data for game: " + result._id);
-        if (!rankingsDisabled) {
-          updateResults(gameData);
-        }
       })
       .catch(function (error) {
         console.error("failed to save game data");
@@ -357,77 +327,6 @@ function getAllPlayers() {
         console.error(error);
       });
   });
-}
-
-function getPlayerRankings(playerId, showPersonalRank) {
-  if (rankingsDisabled) {
-    return Promise.resolve([]);
-  }
-  return ready
-    .then(function () {
-      return statsInitialized();
-    })
-    .then(function () {
-      var sortedPlayerIds = Object.keys(stats).sort(function (id1, id2) {
-        return stats[id1].rank - stats[id2].rank;
-      });
-      var playerStats = [];
-
-      if (showPersonalRank && playerId) {
-        debug("Getting player rankings for player " + playerId);
-        var myRankings = [];
-        var playerAdded = false;
-        var playersBelowPlayerRank = 0;
-        for (var i = 0; i < sortedPlayerIds.length; i++) {
-          var sortedPlayerId = sortedPlayerIds[i];
-          if (playerAdded) {
-            playersBelowPlayerRank++;
-            if (
-              playersBelowPlayerRank >= playerRanksToReturn / 2 &&
-              myRankings.length > playerRanksToReturn - 1
-            ) {
-              break;
-            }
-          }
-
-          var rankedPlayerStats = Object.assign({}, stats[sortedPlayerId]);
-          rankedPlayerStats.playerId = sortedPlayerId;
-          myRankings.push(rankedPlayerStats);
-          if (sortedPlayerId === playerId) {
-            playerAdded = true;
-          }
-        }
-
-        playerStats = myRankings.splice(
-          myRankings.length - playerRanksToReturn,
-          playerRanksToReturn
-        );
-      } else {
-        debug("Getting global player rankings");
-        for (var j = 0; j < playerRanksToReturn; j++) {
-          if (stats[sortedPlayerIds[j]]) {
-            var rankedTopPlayerStats = Object.assign(
-              {},
-              stats[sortedPlayerIds[j]]
-            );
-            rankedTopPlayerStats.playerId = sortedPlayerIds[j];
-            playerStats.push(rankedTopPlayerStats);
-          } else {
-            //There are less than 10-20 players registered in the ranks in this case
-            break;
-          }
-        }
-      }
-
-      playerStats.forEach(function (player) {
-        if (playerId && playerId == player.playerId) {
-          player.isPlayer = true;
-        }
-        delete player.playerId;
-      });
-
-      return playerStats;
-    });
 }
 
 //This could be a bit dicey, so beware
@@ -571,8 +470,6 @@ module.exports = {
   recordGameData: timeApi(recordGameData),
   // Called when a player leaves in the middle of a game
   recordPlayerDisconnect: timeApi(recordPlayerDisconnect),
-  // Returns the rankings, either the top N, or the N around a player's position
-  getPlayerRankings: timeApi(getPlayerRankings),
   // Called when the server initially starts
   init: timeApi(init),
 };
