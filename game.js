@@ -992,7 +992,7 @@ module.exports = function createGame(options) {
         addHistory(
           "block",
           curTurnHistGroup(),
-          "{%d} %s ашиглан хориглох",
+          "{%d} %s ашиглан хориглосон",
           state.state.target,
           state.state.blockingRole
         );
@@ -1184,7 +1184,7 @@ module.exports = function createGame(options) {
         addHistory(
           "шалгалт-буруу",
           curTurnHistGroup(),
-          "%s; {%d} үхүүлсэн %s",
+          "%s; {%d} %s-аа үхүүлсэн",
           message,
           playerIdx,
           revealedRole
@@ -1300,7 +1300,7 @@ module.exports = function createGame(options) {
         addHistory(
           "assassinate",
           curTurnHistGroup(),
-          "%s; {%d} %s-ээ үхүүлсэн",
+          "%s; {%d} %s-аа үхүүлсэн",
           message,
           actionState.target,
           revealedRole
