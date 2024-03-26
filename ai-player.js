@@ -10,21 +10,13 @@ var shared = require("./web/shared");
 var stateNames = shared.states;
 var actions = shared.actions;
 
-var rankedRoles = [
-  "duke",
-  "assassin",
-  "captain",
-  "inquisitor",
-  "contessa",
-  "ambassador",
-];
+var rankedRoles = ["duke", "assassin", "captain", "contessa", "ambassador"];
 // The weights show how likely a role is to be revealed by AI
 // E.g. ambassador is 3 times more likely to be revealed than duke
 var roleWeights = {
   duke: 3,
   assassin: 4,
   captain: 5,
-  inquisitor: 6,
   contessa: 6,
   ambassador: 9,
 };

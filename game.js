@@ -513,15 +513,7 @@ module.exports = function createGame(options) {
       throw new GameException("Not enough players are ready to play");
     }
     gameStats = dataAccess.constructGameStats();
-    // state.gameType = gameType || "original";
-    // gameStats.gameType = gameType || "original";
     state.roles = ["duke", "captain", "assassin", "contessa"];
-    // if (
-    // gameStats.gameType === "inquisitors" ||
-    // gameStats.gameType == "reformation"
-    // ) {
-    // state.roles.push("inquisitor");
-    // } else {
     state.roles.push("ambassador");
     // }
 

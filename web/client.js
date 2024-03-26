@@ -820,9 +820,6 @@ function roleDescription(role) {
   if (role === "ambassador") {
     return "Өөрийн нэг дүрийг газар дахь 2 дүрээс сонгож солих";
   }
-  if (role === "inquisitor") {
-    return "Draw one from the deck and exchange OR look at one opponent's role and optionally force an exchange";
-  }
   if (role === "assassin") {
     return "3₮ төлөөд нэг тоглогчийн нэг дүрийг устгах; эсрэг тоглогч contessa-тай үед боломжгүй";
   }
@@ -835,9 +832,6 @@ function roleDescription(role) {
   }
   if (role === "duke") {
     var desc = "+3₮ авах; foreign aid-ийг хориглоно";
-    if (vm.state.gameType() == "reformation") {
-      desc += "; cannot embezzle";
-    }
     return desc;
   }
   return "";
@@ -873,14 +867,10 @@ function actionNames() {
     "tax",
     "steal",
     "assassinate",
-    "interrogate",
     "exchange",
     "income",
     "foreign-aid",
     "coup",
-    "change-team",
-    "convert",
-    "embezzle",
   ];
 }
 // Exchange action requires inquisitor or ambassador - return whichever one is in the current game type.

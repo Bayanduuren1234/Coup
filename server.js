@@ -33,9 +33,6 @@ app.use(express.static(__dirname + "/web"));
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var version = require("./version");
-app.get("/version.js", version);
-
 app.get("/", function (req, res) {
   res.render("pages/index.ejs");
 });
