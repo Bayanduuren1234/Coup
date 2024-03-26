@@ -820,7 +820,7 @@ module.exports = function createGame(options) {
           addHistory(
             state.state.reason,
             curTurnHistGroup(),
-            "%s; {%d} %s-г үхүүлсэн",
+            "%s; {%d} %s-аа үхүүлсэн",
             state.state.message,
             playerIdx,
             command.role
@@ -1339,7 +1339,7 @@ module.exports = function createGame(options) {
         addHistory(
           "coup",
           curTurnHistGroup(),
-          "%s; {%d} %s-г үхүүлсэн",
+          "%s; {%d} %s-аа үхүүлсэн",
           message,
           actionState.target,
           revealedRole

@@ -3,11 +3,8 @@ A database containing around 600,000 online games of Coup recorded from http://t
 The database is a JSON array, where each entry in the array is an object representing a single game. Each game object has the following fields:
 
     gameId          string          a unique id for the game
-    gameType        string          the type of game ("original" or "inquisitors")
     playerCount     number          the number of players in the game
     playerIds       Array<string>   the unique ids of the players in the game (AI players have the id "ai")
-    winner          number          the player who won the game, as an index into the
-    events          string          the events of the game
 
 The events field represents the actions that the players took and their consequences. Events are encoded as a base64 string, which can be decoded into JSON objects using `game-tracker.js` in this project. There is also a script, `extract-games.js`, which will decode the events from all the games from `games.json.gz` and write them to a file called `games_full.json.gz`. This file is also available for download here: https://s3-eu-west-1.amazonaws.com/treason.thebrown.net/games_full.json.gz. Beware: this file is a lot larger, 8 GB when decompressed, and it may not fit in memory when using a regular JSON reader. An example of how to read `games_full.json.gz` using a streaming JSON reader can be found in `example-read-games.js`.
 
