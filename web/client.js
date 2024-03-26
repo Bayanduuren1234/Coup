@@ -312,7 +312,7 @@ socket.on("game-error", function (data) {
 });
 
 socket.on("gamenotfound", function (data) {
-  alert("Game not found");
+  alert("Тоглолт олдсонгүй");
   location.hash = "";
   hideModals();
 });

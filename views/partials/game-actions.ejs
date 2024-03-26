@@ -171,13 +171,13 @@
   <div data-bind="visible: weAreTargeted('block-response')">
     <i class="block"></i>
     <span data-bind="text: stateMessage()"></span><br /><br />
-    Шалгалтыг хүлээж байна.
+    Бусад тоглогчдын зөвшөөрлийг хүлээж байна.
   </div>
   <div data-bind="visible: theyAreTargeted('block-response') &amp;&amp; weAreAlive()">
     <i class="block"></i>
     <span data-bind="text: stateMessage()"></span><br /><br />
     <!-- ko if: !weAreAlive() -->
-    Шалгалтыг хүлээж байна.
+    Бусад тоглогчдын зөвшөөрлийг хүлээж байна.
     <!-- /ko -->
     <!-- ko if: weAreAlive() -->
     <p data-bind="text: ourTeamWarning()"></p>

@@ -521,10 +521,6 @@ function createAiPlayer(game, options) {
     debug("player " + playerIdx + " claimed " + role);
   }
 
-  // function isReformation() {
-  //     return state.gameType == 'reformation';
-  // }
-
   function playOurTurn() {
     var influence = ourInfluence();
     debug("influence: " + influence);
@@ -551,20 +547,6 @@ function createAiPlayer(game, options) {
     ) {
       playAction("tax");
     } else if (
-      isReformation() & (influence.indexOf("duke") == -1) &&
-      influence.indexOf("captain") > -1 &&
-      state.treasuryReserve > 2 &&
-      !randomizeChoice()
-    ) {
-      playAction("embezzle");
-    } else if (
-      isReformation() & (influence.indexOf("duke") == -1) &&
-      influence.indexOf("captain") == -1 &&
-      state.treasuryReserve > 1 &&
-      !randomizeChoice()
-    ) {
-      playAction("embezzle");
-    } else if (
       countRevealedRoles("duke") == state.numRoles &&
       influence.indexOf("captain") == -1 &&
       !randomizeChoice()
@@ -586,9 +568,6 @@ function createAiPlayer(game, options) {
       if (shouldBluff("tax")) {
         possibleBluffs.push("tax");
       }
-      if (isReformation() & shouldBluff("embezzle")) {
-        possibleBluffs.push("embezzle");
-      }
       if (possibleBluffs.length && !randomizeChoice()) {
         // Randomly select one.
         var actionName = possibleBluffs[rand(possibleBluffs.length)];
@@ -598,8 +577,6 @@ function createAiPlayer(game, options) {
           playAction("steal", captainTarget());
         } else if (actionName == "assassinate") {
           playAction("assassinate", assassinTarget());
-        } else if (isReformation() && actionName == "embezzle") {
-          playAction("embezzle");
         }
         // Now that we've bluffed, recalculate whether or not to bluff next time.
         bluffChoice = rand.random() < options.chanceToBluff;

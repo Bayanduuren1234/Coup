@@ -1339,7 +1339,7 @@ module.exports = function createGame(options) {
         addHistory(
           "coup",
           curTurnHistGroup(),
-          "%s; {%d} revealed %s",
+          "%s; {%d} %s-г үхүүлсэн",
           message,
           actionState.target,
           revealedRole
@@ -1560,7 +1560,7 @@ module.exports = function createGame(options) {
         currentState = "Тоглогчдыг хүлээж байна";
         break;
       default:
-        currentState = "in progress";
+        currentState = "Тоглогчдыг хүлээж байна";
     }
 
     var playerCount = 0;
