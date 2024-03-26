@@ -1,54 +1,26 @@
 <ul class="list-group" data-bind="foreach: state.players">
-  <li
-    class="list-group-item"
-    data-bind="css: { 'current-player' : $index() == $root.state.state.playerIdx() }"
-  >
+  <li class="list-group-item" data-bind="css: { 'current-player' : $index() == $root.state.state.playerIdx() }">
     <div class="row" data-bind="visible: $root.waitingToPlay">
       <div class="col-xs-6">
-        <span
-          data-bind="text: name, css: { 'dead-player' : isReady() == 'observe' }"
-        ></span>
-        <span
-          class="glyphicon glyphicon-eye-open observer"
-          data-bind="visible: isReady() == 'observe'"
-        ></span>
+        <span data-bind="text: name, css: { 'dead-player' : isReady() == 'observe' }"></span>
+        <span class="glyphicon glyphicon-eye-open observer" data-bind="visible: isReady() == 'observe'"></span>
       </div>
       <div class="col-xs-6">
-        <span
-          class="badge"
-          data-bind="text: (isReady() ? 'тоглоход бэлэн' : 'бэлэн биш')"
-        ></span>
+        <span class="badge" data-bind="text: (isReady() ? 'тоглоход бэлэн' : 'бэлэн биш')"></span>
       </div>
     </div>
     <div class="row" data-bind="visible: !$root.waitingToPlay()">
       <div class="col-xs-6">
-        <span
-          data-bind="text: name, css: { 'dead-player' : influenceCount() == 0 }"
-        ></span>
-        <span
-          class="badge"
-          data-bind="text: '$' + cash(), visible: !isObserver()"
-        ></span>
-        <span
-          class="glyphicon glyphicon-eye-open observer"
-          data-bind="visible: isObserver()"
-        ></span>
-        <i
-          class="team-red"
-          data-bind="visible: influenceCount() > 0 && team() == 1"
-        ></i>
-        <i
-          class="team-blue"
-          data-bind="visible: influenceCount() > 0 && team() == -1"
-        ></i>
+        <span data-bind="text: name, css: { 'dead-player' : influenceCount() == 0 }"></span>
+        <span class="badge" data-bind="text: cash() + '₮', visible: !isObserver()"></span>
+        <span class="glyphicon glyphicon-eye-open observer" data-bind="visible: isObserver()"></span>
+        <i class="team-red" data-bind="visible: influenceCount() > 0 && team() == 1"></i>
+        <i class="team-blue" data-bind="visible: influenceCount() > 0 && team() == -1"></i>
       </div>
       <div class="col-xs-6">
         <!-- ko foreach: influence -->
-        <span
-          class="label"
-          data-bind="text: role, css: labelClass(role(), revealed()), tooltip: { title: roleDescription(role()), trigger: 'hover', placement: 'right' }"
-        ></span
-        ><br />
+        <span class="label"
+          data-bind="text: role, css: labelClass(role(), revealed()), tooltip: { title: roleDescription(role()), trigger: 'hover', placement: 'right' }"></span><br />
         <!-- /ko -->
       </div>
     </div>
@@ -56,53 +28,35 @@
 </ul>
 <ul class="list-group">
   <li class="list-group-item">
-    <a
-      href="javascript: null"
-      data-bind="event: {vclick: showChat}, visible: sidebar() != 'chat'"
-      >Чат</a
-    >
+    <a href="javascript: null" data-bind="event: {vclick: showChat}, visible: sidebar() != 'chat'">Чат</a>
     <div data-bind="visible: sidebar() == 'chat'">
       <div class="chat"></div>
-      <textarea
-        class="form-control"
-        rows="2"
-        placeholder="чат бичих"
-      ></textarea>
+      <textarea class="form-control" rows="2" placeholder="чат бичих"></textarea>
     </div>
   </li>
   <li class="list-group-item">
-    <a
-      href="javascript: null"
-      data-bind="event: {vclick: showCheatSheet}, visible: sidebar() != 'cheat'"
-      >Дүрүүдийн чадвар харах</a
-    >
+    <a href="javascript: null" data-bind="event: {vclick: showCheatSheet}, visible: sidebar() != 'cheat'">Дүрүүдийн
+      чадвар харах</a>
     <div data-bind="visible: sidebar() == 'cheat'">
       <!-- ko foreach: state.roles -->
       <p>
-        <span
-          class="label"
-          data-bind="text: $data, css: labelClass($data)"
-        ></span>
+        <span class="label" data-bind="text: $data, css: labelClass($data)"></span>
         <span data-bind="text: roleDescription($data)"></span>
       </p>
       <!-- /ko -->
       <!-- ko if: state.roles().length > 0 -->
       <p>
-        Foreign aid +$2 аваад өөрийн ээлжийг алгасах; эсрэг тоглогч duke-тэй үед
+        Foreign aid +2₮ аваад өөрийн ээлжийг алгасах; эсрэг тоглогч duke-тэй үед
         боломжгүй
       </p>
-      <p>Income +$1 аваад өөрийн ээлжийг алгасах</p>
+      <p>Income +1₮ аваад өөрийн ээлжийг алгасах</p>
       <!-- ko if: state.gameType() == 'reformation' -->
       <p>
-        $7-г төлснөөр нэг тоглогчын нэг дүрийг устгах, хориглох зүйл байхгүй
+        Coup 7₮ төлснөөр нэг тоглогчын нэг дүрийг устгах, хориглох зүйл байхгүй
       </p>
-      <p>Pay $1 to change teams</p>
-      <p>Pay $2 to convert another player to the other team</p>
-      <p>Embezzle from the treasury reserve $?; forbidden to duke</p>
       <!-- /ko -->
       <!-- /ko -->
-      <!-- ko if: state.roles().length === 0 -->
-      <p>Not available until the game starts</p>
+      <p>Тоглолт эхэлсний дараа харах боломжтой!!!</p>
       <!-- /ko -->
     </div>
   </li>
@@ -110,8 +64,5 @@
 <p><a href="rules.html" target="blank">Тоглох заавар</a></p>
 <p><a href="" data-bind="click: leaveGame">Тоглолтоос гарах</a></p>
 <p>
-  <a
-    href="javascript:;"
-    data-bind="visible: notifsSupported, text: notifToggleText, click: toggleNotifs"
-  ></a>
+  <a href="javascript:;" data-bind="visible: notifsSupported, text: notifToggleText, click: toggleNotifs"></a>
 </p>

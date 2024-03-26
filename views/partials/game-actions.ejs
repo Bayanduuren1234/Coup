@@ -3,32 +3,20 @@
   <div data-bind="visible: waitingToPlay">
     <p>Тоглогчдыг хүлээж байнa...</p>
     <p data-bind="visible: !wantToStart()">
-      <button
-        class="btn btn-default"
-        data-bind="enable: canAddAi(), event: {vclick: addAi}"
-      >
+      <button class="btn btn-default" data-bind="enable: canAddAi(), event: {vclick: addAi}">
         Хиймэл оюун нэмэх
       </button>
-      <button
-        class="btn btn-default"
-        data-bind="enable: canRemoveAi(), event: {vclick: removeAi}"
-      >
+      <button class="btn btn-default" data-bind="enable: canRemoveAi(), event: {vclick: removeAi}">
         Хиймэл оюун хасах
       </button>
       <br />
-      <button
-        class="btn btn-default"
-        data-bind="event: {vclick: start.bind(null, 'original')}, enable: canStartGame"
-      >
+      <button class="btn btn-default" data-bind="event: {vclick: start.bind(null, 'original')}, enable: canStartGame">
         Тоглолтыг эхлүүлэх
       </button>
     </p>
     <p data-bind="visible: wantToStart()">
       Тоглогчид бүрдээгүй байна. Тоглолтыг эхлүүлэх үү?<br />
-      <button
-        class="btn btn-default"
-        data-bind="event: {vclick: confirmStart.bind(null, null)}"
-      >
+      <button class="btn btn-default" data-bind="event: {vclick: confirmStart.bind(null, null)}">
         Эхлэх
       </button>
       <button class="btn btn-default" data-bind="event: {vclick: cancelStart}">
@@ -54,18 +42,13 @@
     Таны ээлж:<br />
     <!-- ko foreach: actionNames() -->
     <!-- ko if: actionPresentInGame($data) -->
-    <button
-      class="btn btn-action"
-      data-bind="enable: canPlayAction($data), event: {vclick: playAction}, css: buttonActionClass($data)"
-    >
+    <button class="btn btn-action"
+      data-bind="enable: canPlayAction($data), event: {vclick: playAction}, css: buttonActionClass($data)">
       <i data-bind="css: $data"></i>
       <span data-bind="text: $data.replace('-', ' ')"></span>
       <!-- ko if: $data == 'embezzle' -->
-      <span
-        class="badge"
-        style="margin-top: 9px; margin-bottom: 8px"
-        data-bind="text: '+$' + $root.state.treasuryReserve()"
-      ></span>
+      <span class="badge" style="margin-top: 9px; margin-bottom: 8px"
+        data-bind="text: '+$' + $root.state.treasuryReserve()"></span>
       <!-- /ko -->
     </button>
     <!-- /ko -->
@@ -79,10 +62,8 @@
     <span data-bind="text: targetedAction"></span>:
     <!-- ko foreach: state.players -->
     <!-- ko if: canTarget($index()) -->
-    <button
-      class="btn btn-default"
-      data-bind="text: name, event: {vclick: function() { playTargetedAction($index()); }}"
-    ></button>
+    <button class="btn btn-default"
+      data-bind="text: name, event: {vclick: function() { playTargetedAction($index()); }}"></button>
     <!-- /ko -->
     <!-- /ko -->
     <button class="btn btn-link" data-bind="event: {vclick: cancelAction}">
@@ -102,16 +83,11 @@
     <i class="exchange"></i>
     Авч үлдэх <span data-bind="text: ourInfluenceCount()"></span> дүр сонгох:<br />
     <!-- ko foreach: state.state.exchangeOptions -->
-    <button
-      class="btn"
-      data-bind="text: $data, css: exchangeOptionClass($index()), event: {vclick: function() {toggleExchangeOption($index());}}"
-    ></button>
+    <button class="btn"
+      data-bind="text: $data, css: exchangeOptionClass($index()), event: {vclick: function() {toggleExchangeOption($index());}}"></button>
     <!-- /ko -->
     <br />
-    <button
-      class="btn btn-action btn-ambassador"
-      data-bind="enable: exchangeOptionsValid(), event: {vclick: exchange}"
-    >
+    <button class="btn btn-action btn-ambassador" data-bind="enable: exchangeOptionsValid(), event: {vclick: exchange}">
       <i class="exchange"></i>
       <span>Дүр солих</span>
     </button>
@@ -124,62 +100,45 @@
   <div data-bind="visible: weAreInState('interrogate')">
     <i class="interrogate"></i>
     <span data-bind="text: targetPlayerName()"></span> has a
-    <span
-      class="label"
-      data-bind="text: state.state.confession(), css: labelClass(state.state.confession())"
-    ></span
-    ><br />
+    <span class="label"
+      data-bind="text: state.state.confession(), css: labelClass(state.state.confession())"></span><br />
 
     Force <span data-bind="text: targetPlayerName()"></span> to exchange it for
     another role?<br />
-    <button
-      class="btn btn-default"
-      data-bind="event: {vclick: interrogate.bind(null, true)}"
-    >
+    <button class="btn btn-default" data-bind="event: {vclick: interrogate.bind(null, true)}">
       Тийм
     </button>
-    <button
-      class="btn btn-default"
-      data-bind="event: {vclick: interrogate.bind(null, false)}"
-    >
+    <button class="btn btn-default" data-bind="event: {vclick: interrogate.bind(null, false)}">
       Үгүй
     </button>
   </div>
   <div data-bind="visible: weAreInState('action-response')">
     <i data-bind="css: state.state.action"></i>
     <span data-bind="text: stateMessage()"></span><br /><br />
-    Хамгаалах/Шалгах эсэхийг хүлээж байна.
+    Бусад тоглогчдын зөвшөөрлийг хүлээж байна.
   </div>
   <div data-bind="visible: theyAreInState('action-response')">
     <i data-bind="css: state.state.action"></i>
     <span data-bind="text: stateMessage()"></span><br /><br />
     <!-- ko if: !weCanBlock() && !weCanChallenge() -->
-    Хамгаалах/Шалгах эсэхийг хүлээж байна.
+    Бусад тоглогчдын зөвшөөрлийг хүлээж байна.
     <!-- /ko -->
     <!-- ko if: weCanBlock() || weCanChallenge() -->
     <p data-bind="text: ourTeamWarning()"></p>
-    <button
-      class="btn btn-action"
-      data-bind="event: {vclick: allow}, css: { 'btn-success': weAllowed(), 'btn-default': !weAllowed() }"
-    >
+    <button class="btn btn-action"
+      data-bind="event: {vclick: allow}, css: { 'btn-success': weAllowed(), 'btn-default': !weAllowed() }">
       <i class="allow"></i>
       <span>Зөвшөөрөх</span>
     </button>
     <!-- ko if: weCanBlock() -->
     <!-- ko foreach: blockingRoles() -->
-    <button
-      class="btn btn-action"
-      data-bind="event: {vclick: block}, css: buttonActionClass($data)"
-    >
+    <button class="btn btn-action" data-bind="event: {vclick: block}, css: buttonActionClass($data)">
       <i class="block"></i>
-      <span data-bind="text: 'Block with ' + $data"></span>
+      <span data-bind="text: $data + ' -аар хамгаалах'"></span>
     </button>
     <!-- /ko -->
     <!-- /ko -->
-    <button
-      class="btn btn-action btn-default"
-      data-bind="event: {vclick: challenge}, visible: weCanChallenge()"
-    >
+    <button class="btn btn-action btn-default" data-bind="event: {vclick: challenge}, visible: weCanChallenge()">
       <i class="challenge"></i>
       <span>Шалгах</span>
     </button>
@@ -196,20 +155,15 @@
     <!-- /ko -->
     <!-- ko if: weCanBlock() -->
     Хамгаалах сүүлийн боломж<br />
-    <button
-      class="btn btn-action"
-      data-bind="event: {vclick: allow}, css: { 'btn-success': weAllowed(), 'btn-default': !weAllowed() }"
-    >
+    <button class="btn btn-action"
+      data-bind="event: {vclick: allow}, css: { 'btn-success': weAllowed(), 'btn-default': !weAllowed() }">
       <i class="allow"></i>
       <span>Зөвшөөрөх</span>
     </button>
     <!-- ko foreach: blockingRoles() -->
-    <button
-      class="btn btn-action"
-      data-bind="event: {vclick: block}, css: buttonActionClass($data)"
-    >
+    <button class="btn btn-action" data-bind="event: {vclick: block}, css: buttonActionClass($data)">
       <i class="block"></i>
-      <span data-bind="text: 'Block with ' + $data"></span>
+      <span data-bind="text: $data + ' -аар хамгаалах'"></span>
     </button>
     <!-- /ko -->
     <!-- /ko -->
@@ -219,9 +173,7 @@
     <span data-bind="text: stateMessage()"></span><br /><br />
     Шалгалтыг хүлээж байна.
   </div>
-  <div
-    data-bind="visible: theyAreTargeted('block-response') &amp;&amp; weAreAlive()"
-  >
+  <div data-bind="visible: theyAreTargeted('block-response') &amp;&amp; weAreAlive()">
     <i class="block"></i>
     <span data-bind="text: stateMessage()"></span><br /><br />
     <!-- ko if: !weAreAlive() -->
@@ -229,17 +181,12 @@
     <!-- /ko -->
     <!-- ko if: weAreAlive() -->
     <p data-bind="text: ourTeamWarning()"></p>
-    <button
-      class="btn btn-action"
-      data-bind="event: {vclick: allow}, css: { 'btn-success': weAllowed(), 'btn-default': !weAllowed() }"
-    >
+    <button class="btn btn-action"
+      data-bind="event: {vclick: allow}, css: { 'btn-success': weAllowed(), 'btn-default': !weAllowed() }">
       <i class="allow"></i>
       <span>Зөвшөөрөх</span>
     </button>
-    <button
-      class="btn btn-action btn-default"
-      data-bind="event: {vclick: challenge}, visible: weCanChallenge()"
-    >
+    <button class="btn btn-action btn-default" data-bind="event: {vclick: challenge}, visible: weCanChallenge()">
       <i class="challenge"></i>
       <span>Шалгах</span>
     </button>
@@ -249,10 +196,8 @@
     <span data-bind="text: stateMessage()"></span><br /><br />
     Хасах дүрээ сонгоно уу.
     <!-- ko foreach: ourInfluence() -->
-    <button
-      class="btn"
-      data-bind="text: role, css: buttonRoleClass(role()), visible: !revealed(), event: {vclick: reveal}"
-    ></button>
+    <button class="btn"
+      data-bind="text: role, css: buttonRoleClass(role()), visible: !revealed(), event: {vclick: reveal}"></button>
     <!-- /ko -->
   </div>
   <div data-bind="visible: theyMustReveal()">

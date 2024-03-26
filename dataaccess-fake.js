@@ -16,7 +16,7 @@ module.exports = {
       playerDisconnect: [],
       gameStarted: new Date().getTime(),
       gameFinished: 0,
-      gameType: "original",
+      // gameType: "original",
     };
   },
   // Called when a game ends normally (with a winner)

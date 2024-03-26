@@ -274,7 +274,7 @@ socket.on("history", function (data) {
 socket.on("chat", function (data) {
   var from;
   if (data.from == vm.state.playerIdx()) {
-    from = "You";
+    from = "Та";
   } else {
     var player = getPlayer(data.from);
     from = player ? player.name() : "Unknown";
@@ -820,7 +820,7 @@ function leaveGame() {
   location.hash = "";
 }
 function onLeaveGame(oldUrl) {
-  if (confirm("Are you sure you want to leave this game?")) {
+  if (confirm("Та тоглолтоос гарах гэж байна?")) {
     command("leave");
   } else {
     history.pushState(null, "", oldUrl);
@@ -828,23 +828,23 @@ function onLeaveGame(oldUrl) {
 }
 $(window).on("beforeunload", function (e) {
   if (vm.playing()) {
-    return (e.returnValue = "Are you sure you want to leave this game?");
+    return (e.returnValue = "Та тоглолтоос гарах гэж байна?");
   }
 });
 function formatMessage(message) {
   for (var i = 0; i < vm.state.players().length; i++) {
     var playerName;
     if (i == vm.state.playerIdx()) {
-      playerName = "you";
+      playerName = "Та";
     } else {
       var player = getPlayer(i);
       playerName = player ? player.name() : "unknown";
     }
     message = message.replace(new RegExp("\\{" + i + "\\}", "g"), playerName);
   }
-  if (message.indexOf("you ") == 0) {
+  if (message.indexOf("Та ") == 0) {
     // Fix caps.
-    message = "Y" + message.substr(1);
+    message = "Т" + message.substr(1);
   }
   return message;
 }
@@ -868,17 +868,17 @@ function roleDescription(role) {
     return "Draw one from the deck and exchange OR look at one opponent's role and optionally force an exchange";
   }
   if (role === "assassin") {
-    return "$3 төлөөд нэг тоглогчийн нэг дүрийг устгах; эсрэг тоглогч contessa-тай үед боломжгүй";
+    return "3₮ төлөөд нэг тоглогчийн нэг дүрийг устгах; эсрэг тоглогч contessa-тай үед боломжгүй";
   }
   if (role === "captain") {
-    return "$2 нэг тоглогчоос дээрэмдэх; эсрэг тоглогч captain эсвэл ambassador-тай үед боломжгүй";
+    return "2₮ нэг тоглогчоос дээрэмдэх; эсрэг тоглогч captain эсвэл ambassador-тай үед боломжгүй";
     // getActionRole(actions.exchange)
   }
   if (role === "contessa") {
     return "assassin-ий үйлдлийг хориглоно";
   }
   if (role === "duke") {
-    var desc = "+$3 авах; foreign aid-ийг хориглоно";
+    var desc = "+3₮ авах; foreign aid-ийг хориглоно";
     if (vm.state.gameType() == "reformation") {
       desc += "; cannot embezzle";
     }

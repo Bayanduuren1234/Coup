@@ -22,17 +22,15 @@ var MAX_PLAYERS = 10;
 var INITIAL_CASH = 2;
 var INFLUENCES = 2;
 
-var epithets = fs
-  .readFileSync(__dirname + "/epithets.txt", "utf8")
-  .split(/\r?\n/);
+// var epithets = fs
+//   .readFileSync(__dirname + "/epithets.txt", "utf8")
+//   .split(/\r?\n/);
 
 const actionMessages = {
-  assassinate: (idx, target) => `{${idx}} attempted to assassinate {${target}}`,
-  steal: (idx, target) => `{${idx}} attempted to steal from {${target}}`,
-  exchange: (idx) => `{${idx}} attempted to exchange`,
-  interrogate: (idx, target) => `{${idx}} attempted to interrogate {${target}}`,
-  embezzle: (idx, target, action, state) =>
-    `{${idx}} attempted to embezzle $${state.treasuryReserve}`,
+  assassinate: (idx, target) =>
+    `{${idx}} {${target}}-руу assassin ашигласан байна`,
+  steal: (idx, target) => `{${idx}} {${target}}-аас steal хийж байна`,
+  exchange: (idx) => `{${idx}} exchange хийж байна`,
 };
 
 module.exports = function createGame(options) {
@@ -43,7 +41,7 @@ module.exports = function createGame(options) {
   var state = {
     stateId: 1,
     gameId: gameId,
-    gameType: "original",
+    // gameType: "original",
     players: [],
     numRoles: 3,
     numPlayers: 0,
@@ -78,7 +76,7 @@ module.exports = function createGame(options) {
   game.canJoin = canJoin;
   game.password = password;
   game.currentState = currentState;
-  game.gameType = gameType;
+  // game.gameType = gameType;
   game.playersInGame = playersInGame;
   game.playerJoined = playerJoined;
   game._test_setTurnState = _test_setTurnState;
@@ -167,8 +165,9 @@ module.exports = function createGame(options) {
     name = name || "Anonymous";
     for (var i = 0; i < state.players.length; i++) {
       if (state.players[i].name == name) {
-        var epithet = epithets[rand(epithets.length)];
-        return playerName(name + " " + epithet);
+        // var epithet = epithets[rand(epithets.length)];
+        var epithet = Math.floor(Math.random() * 1000) + 1;
+        return playerName(name + "-" + epithet);
       }
     }
     return name;
@@ -514,17 +513,17 @@ module.exports = function createGame(options) {
       throw new GameException("Not enough players are ready to play");
     }
     gameStats = dataAccess.constructGameStats();
-    state.gameType = gameType || "original";
-    gameStats.gameType = gameType || "original";
+    // state.gameType = gameType || "original";
+    // gameStats.gameType = gameType || "original";
     state.roles = ["duke", "captain", "assassin", "contessa"];
-    if (
-      gameStats.gameType === "inquisitors" ||
-      gameStats.gameType == "reformation"
-    ) {
-      state.roles.push("inquisitor");
-    } else {
-      state.roles.push("ambassador");
-    }
+    // if (
+    // gameStats.gameType === "inquisitors" ||
+    // gameStats.gameType == "reformation"
+    // ) {
+    // state.roles.push("inquisitor");
+    // } else {
+    state.roles.push("ambassador");
+    // }
 
     let nonObservers = [];
 
@@ -583,15 +582,15 @@ module.exports = function createGame(options) {
         gameStats.humanPlayers++;
       }
 
-      if (gameStats.gameType == "reformation") {
-        playerState.team = nextTeam;
-        nextTeam *= -1;
-      }
+      // if (gameStats.gameType == "reformation") {
+      //   playerState.team = nextTeam;
+      //   nextTeam *= -1;
+      // }
     }
 
-    if (gameStats.gameType == "reformation") {
-      state.freeForAll = false;
-    }
+    // if (gameStats.gameType == "reformation") {
+    //   state.freeForAll = false;
+    // }
 
     let firstPlayer;
     if (typeof options.firstPlayer === "number") {
@@ -659,9 +658,9 @@ module.exports = function createGame(options) {
     if (action.roles && !getActionRole(action)) {
       return false;
     }
-    if (action.gameType && action.gameType != state.gameType) {
-      return false;
-    }
+    // if (action.gameType && action.gameType != state.gameType) {
+    //   return false;
+    // }
     return true;
   }
 
@@ -753,7 +752,7 @@ module.exports = function createGame(options) {
         const msgFunc =
           actionMessages[command.action] ||
           ((idx, _, action) =>
-            `{${idx}} attempted to draw ${action.replace("-", " ")}`);
+            `{${idx}} ${action.replace("-", " ")} авахаар завдаж байна`);
         const message = msgFunc(
           playerIdx,
           command.target,
@@ -888,14 +887,14 @@ module.exports = function createGame(options) {
         target: playerIdx,
         blockingRole: command.blockingRole,
         message: format(
-          "{%d} attempted to block with " + command.blockingRole,
+          "{%d} " + command.blockingRole + " ашиглан хориглосон",
           playerIdx
         ),
       });
       resetAllows(playerIdx);
     } else if (command.command == "allow") {
       if (playerState.influenceCount == 0) {
-        throw new GameException("Dead players cannot allow actions");
+        throw new GameException("Хасагдсан тоглогчид үйлдэл хийх боломжгүй");
       }
       var stateChanged = allow(playerIdx);
       if (!stateChanged) {
@@ -933,7 +932,7 @@ module.exports = function createGame(options) {
       addHistory(
         "exchange",
         curTurnHistGroup(),
-        "{%d} exchanged roles",
+        "{%d} дүрээ сольсон",
         playerIdx
       );
       nextTurn();
@@ -1001,7 +1000,7 @@ module.exports = function createGame(options) {
         addHistory(
           "block",
           curTurnHistGroup(),
-          "{%d} blocked with %s",
+          "{%d} %s ашиглан хориглох",
           state.state.target,
           state.state.blockingRole
         );
@@ -1249,7 +1248,7 @@ module.exports = function createGame(options) {
         addHistory(
           "шалгалт-амжилттай",
           curTurnHistGroup(),
-          "%s; {%d} revealed %s",
+          "%s; {%d} %s -aa үхүүлсэн",
           message,
           challengedPlayerIdx,
           revealedRole
@@ -1298,14 +1297,18 @@ module.exports = function createGame(options) {
     var action = actions[actionState.action];
     playerState.cash += action.gain || 0;
     if (actionState.action == "assassinate") {
-      message = format("{%d} assassinated {%d}", playerIdx, actionState.target);
+      message = format(
+        "{%d} {%d}-руу assassin ашигласан",
+        playerIdx,
+        actionState.target
+      );
       target = state.players[actionState.target];
       if (target.influenceCount == 1) {
         revealedRole = revealFirstInfluence(target);
         addHistory(
           "assassinate",
           curTurnHistGroup(),
-          "%s; {%d} revealed %s",
+          "%s; {%d} %s-ээ үхүүлсэн",
           message,
           actionState.target,
           revealedRole
@@ -1326,7 +1329,7 @@ module.exports = function createGame(options) {
       }
     } else if (actionState.action == "coup") {
       message = format(
-        "{%d} staged a coup on {%d}",
+        "{%d} {%d}-ийг Coup буюу 7₮ ашиглан устгасан",
         playerIdx,
         actionState.target
       );
@@ -1360,7 +1363,7 @@ module.exports = function createGame(options) {
       addHistory(
         "steal",
         curTurnHistGroup(),
-        "{%d} stole from {%d}",
+        "{%d} {%d}-ээс ₮ хулгайлсан",
         playerIdx,
         actionState.target
       );
@@ -1435,7 +1438,7 @@ module.exports = function createGame(options) {
       addHistory(
         actionState.action,
         curTurnHistGroup(),
-        "{%d} drew %s",
+        "{%d} %s авсан",
         playerIdx,
         actionState.action.replace("-", " ")
       );
@@ -1571,9 +1574,9 @@ module.exports = function createGame(options) {
     return currentState + " (" + playerCount + "/" + state.maxPlayers + ")";
   }
 
-  function gameType() {
-    return (gameStats && gameStats.gameType) || "original";
-  }
+  // function gameType() {
+  //   return (gameStats && gameStats.gameType) || "original";
+  // }
 
   function playersInGame() {
     var playerList = [];

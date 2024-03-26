@@ -1,117 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Төрийн эргэлт</title>
-    <meta
-      name="description"
-      content="Coup картан тоглоомыг найзуудтайгаа болон хиймэл оюунтай тоглох"
-    />
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link
-      rel="stylesheet"
-      href="lib/bootstrap-3.3.5-dist/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="client.css" />
-    <link rel="stylesheet" href="lib/jquery-ui.css" />
+  <title>Төрийн эргэлт</title>
+  <meta name="description" content="Coup картан тоглоомыг найзуудтайгаа болон хиймэл оюунтай тоглох" />
 
-    <script src="lib/jquery-2.1.4.js"></script>
-    <script src="lib/jquery.mobile.custom.js"></script>
-    <script src="lib/jquery-ui.js"></script>
-    <script src="lib/underscore.js"></script>
-    <script src="lib/knockout-3.3.0.debug.js"></script>
-    <script src="lib/knockout.mapping-debug.js"></script>
-    <script src="lib/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="shared.js"></script>
-    <script src="client.js"></script>
-    <script src="version.js"></script>
-  </head>
-  <body style="display: none" data-bind="visible: true">
-    <div class="container" data-bind="visible: !playing()">
-      <div class="row">
-        <div class="col-sm-9">
-          <h3>Вебэд суурилсан тоглоом хөгжүүлэлт</h3>
-          <!-- <p>Сервер: <span data-bind="text: server"></span></p> -->
-          <!-- <p data-bind="text: version"></p> -->
-        </div>
-        <div class="col-sm-1">
-          <p class="profile-button" data-bind="visible: loggedIn()">
-            <a href="" data-bind="click: showUserProfileDialog"
-              ><i class="user" title="Profile"></i
-            ></a>
-          </p>
-        </div>
+  <link rel="stylesheet" href="lib/bootstrap-3.3.5-dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="client.css" />
+  <link rel="stylesheet" href="lib/jquery-ui.css" />
+
+  <script src="lib/jquery-2.1.4.js"></script>
+  <script src="lib/jquery.mobile.custom.js"></script>
+  <script src="lib/jquery-ui.js"></script>
+  <script src="lib/underscore.js"></script>
+  <script src="lib/knockout-3.3.0.debug.js"></script>
+  <script src="lib/knockout.mapping-debug.js"></script>
+  <script src="lib/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="shared.js"></script>
+  <script src="client.js"></script>
+  <script src="version.js"></script>
+</head>
+
+<body style="display: none" data-bind="visible: true">
+  <div class="container" data-bind="visible: !playing()">
+    <div class="row">
+      <div class="col-sm-9">
+        <h3>Вебэд суурилсан тоглоом хөгжүүлэлт</h3>
+        <!-- <p>Сервер: <span data-bind="text: server"></span></p> -->
+        <!-- <p data-bind="text: version"></p> -->
       </div>
-      <div class="row">
-        <!-- ko foreach: alerts -->
-        <div class="col-sm-10 alert alert-danger">
-          <button type="button" class="close" data-bind="click: dismissAlert">
-            &times;
-          </button>
-          <span data-bind="text: $data"></span>
-        </div>
-        <!-- /ko -->
+      <div class="col-sm-1">
+        <p class="profile-button" data-bind="visible: loggedIn()">
+          <a href="" data-bind="click: showUserProfileDialog"><i class="user" title="Profile"></i></a>
+        </p>
       </div>
-      <!-- ko if: !loggedIn() -->
-      <%- include('../partials/login.ejs') -%>
+    </div>
+    <div class="row">
+      <!-- ko foreach: alerts -->
+      <div class="col-sm-10 alert alert-danger">
+        <button type="button" class="close" data-bind="click: dismissAlert">
+          &times;
+        </button>
+        <span data-bind="text: $data"></span>
+      </div>
+      <!-- /ko -->
+    </div>
+    <!-- ko if: !loggedIn() -->
+    <%- include('../partials/login.ejs') -%>
       <!-- /ko -->
       <!-- ko if: loggedIn() -->
       <%- include('../partials/lobby.ejs') -%>
+        <!-- /ko -->
+  </div>
+
+  <div class="container" style="display: none" data-bind="visible: playing()">
+    <div class="row">
+      <!-- ko foreach: alerts -->
+      <div class="col-sm-10 alert alert-danger">
+        <button type="button" class="close" data-bind="click: dismissAlert">
+          &times;
+        </button>
+        <span data-bind="text: $data"></span>
+      </div>
       <!-- /ko -->
     </div>
-
-    <div class="container" style="display: none" data-bind="visible: playing()">
-      <div class="row">
-        <!-- ko foreach: alerts -->
-        <div class="col-sm-10 alert alert-danger">
-          <button type="button" class="close" data-bind="click: dismissAlert">
-            &times;
-          </button>
-          <span data-bind="text: $data"></span>
-        </div>
-        <!-- /ko -->
+    <div class="row" data-bind="visible: playingPassword()">
+      <div class="col-xs-12">
+        <p>Нууц үг: <span data-bind="text: playingPassword()"></span></p>
       </div>
-      <div class="row" data-bind="visible: playingPassword()">
-        <div class="col-xs-12">
-          <p>Нууц үг: <span data-bind="text: playingPassword()"></span></p>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-4">
+        <!-- Players and chat -->
+        <%- include('../partials/side-bar.ejs') -%>
       </div>
-      <div class="row">
-        <div class="col-xs-4">
-          <!-- Players and chat -->
-          <%- include('../partials/side-bar.ejs') -%>
-        </div>
-        <div class="col-xs-8 activity">
-          <!-- Actions panel -->
-          <%- include('../partials/game-actions.ejs') -%>
+      <div class="col-xs-8 activity">
+        <!-- Actions panel -->
+        <%- include('../partials/game-actions.ejs') -%>
 
           <!-- History -->
           <ul class="list-group" data-bind="foreach: history">
-            <li
-              class="list-group-item"
-              data-bind="css: historyBorderClass($data)"
-            >
-              <ul
-                class="history-group"
-                data-bind="foreach: {data: $data, afterAdd: animateHistory}"
-              >
-                <li
-                  class="history-group-item"
-                  data-bind="attr: {'data-icon': icon}"
-                >
+            <li class="list-group-item" data-bind="css: historyBorderClass($data)">
+              <ul class="history-group" data-bind="foreach: {data: $data, afterAdd: animateHistory}">
+                <li class="history-group-item" data-bind="attr: {'data-icon': icon}">
                   <i data-bind="css: icon"></i>
                   <span data-bind="text: message"></span>
                 </li>
               </ul>
             </li>
           </ul>
-        </div>
       </div>
     </div>
-    <%- include('../partials/modals.ejs') -%>
-  </body>
+  </div>
+  <%- include('../partials/modals.ejs') -%>
+</body>
+
 </html>

@@ -1,5 +1,4 @@
-How to upgrade the server
-=========================
+# How to upgrade the server
 
 Make sure `local_vars.yml` contains the following keys:
 

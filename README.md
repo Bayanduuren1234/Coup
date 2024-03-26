@@ -1,7 +1,4 @@
-Treason Coup
-------------
-
-A clone of the card game Coup written in Node.js. Play online at http://treason.thebrown.net.
+## Coup
 
 To run it, checkout the source code, install Node.js (version 6 or later), and run:
 
@@ -12,8 +9,7 @@ Then open `http://localhost:8080` in one or more browser windows. For an explana
 
 I use BrowserStack for testing - thanks for the free account guys!
 
-AI
---
+## AI
 
 To play against the AI, click the "Add AI" button before starting the game. The AI implementation is in `ai-player.js`. The `onStateChange` method responds to the current game state and sends commands to the server to play its turn.
 

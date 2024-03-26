@@ -97,7 +97,7 @@ io.on("connection", function (socket) {
             broadcastPlayers();
             socket.broadcast.emit(
               "globalchatmessage",
-              playerName + " has joined the lobby."
+              "Идэвхтэй тоглогч " + playerName + "."
             );
           }
         );
@@ -138,7 +138,7 @@ io.on("connection", function (socket) {
     var playerName = players[socket.playerId].playerName;
 
     var globalMessage = timeStamp + playerName + ": " + data;
-    var localMessage = timeStamp + " You: " + data;
+    var localMessage = timeStamp + " Та: " + data;
 
     socket.emit("globalchatmessage", localMessage);
     socket.broadcast.emit("globalchatmessage", globalMessage);
@@ -151,7 +151,7 @@ io.on("connection", function (socket) {
       if (player) {
         socket.broadcast.emit(
           "globalchatmessage",
-          player.playerName + " has left the lobby."
+          player.playerName + " тоглолтоос гарлаа."
         );
         delete players[socket.playerId];
       }
@@ -281,7 +281,7 @@ function filterGames() {
         var clientGame = {
           gameName: gameName,
           status: game.currentState(),
-          type: game.gameType(),
+          // type: game.gameType(),
           passwordRequired: game.password() ? true : false,
           players: game.playersInGame(),
         };

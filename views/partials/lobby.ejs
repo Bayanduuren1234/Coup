@@ -18,7 +18,7 @@
           <tr>
             <th>Тоглоом</th>
             <th>Төлөв</th>
-            <th>Горим</th>
+            <!-- <th>Горим</th> -->
             <th>Нууц үг</th>
           </tr>
         </thead>
@@ -29,17 +29,13 @@
           </tr>
           <!-- /ko -->
           <!-- ko foreach: games() -->
-          <tr
-            data-toggle="modal"
-            data-target="#joinGameModal"
-            data-bind="attr: {'data-game-name': $data.gameName}"
-          >
+          <tr data-toggle="modal" data-target="#joinGameModal" data-bind="attr: {'data-game-name': $data.gameName}">
             <td data-bind="text: $data.gameName" class="game-name-highlight">
               <!--<a href="" data-dismiss="modal" data-bind="attr: { href: $data.gameName }, text: $data.gameName"></a>-->
             </td>
             <td data-bind="text: $data.status"></td>
-            <td data-bind="text: $data.type"></td>
-            <td data-bind="text: $data.passwordRequired ? 'yes' : 'no'"></td>
+            <!-- <td data-bind="text: $data.type"></td> -->
+            <td data-bind="text: $data.passwordRequired ? 'тийм' : 'үгүй'"></td>
           </tr>
           <!-- /ko -->
         </tbody>
@@ -84,12 +80,8 @@
 
       <div>
         <form data-bind="submit: sendGlobalMessage">
-          <input
-            placeholder="Бүх тоглогчдын чат"
-            type="text"
-            class="form-control"
-            data-bind='value: globalMessage, valueUpdate: "afterkeydown"'
-          />
+          <input placeholder="Бүх тоглогчдын чат" type="text" class="form-control"
+            data-bind='value: globalMessage, valueUpdate: "afterkeydown"' />
         </form>
       </div>
     </div>
